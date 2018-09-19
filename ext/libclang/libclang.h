@@ -47,7 +47,7 @@ static VALUE rb_clang_createTranslationUnit(VALUE mod, VALUE obj);              
 static VALUE rb_clang_createTranslationUnit2(VALUE mod, VALUE obj);                                                  // clang_createTranslationUnit2
 static VALUE rb_clang_createTranslationUnitFromSourceFile(VALUE mod, VALUE obj);                                     // clang_createTranslationUnitFromSourceFile
 static VALUE rb_clang_Cursor_Evaluate(VALUE mod, VALUE obj);                                                         // clang_Cursor_Evaluate
-static VALUE rb_clang_Cursor_getArgument(VALUE mod, VALUE cursor, VALUE index);                                                      // clang_Cursor_getArgument
+static VALUE rb_clang_Cursor_getArgument(VALUE mod, VALUE cursor, VALUE index);                                      // clang_Cursor_getArgument
 static VALUE rb_clang_Cursor_getBriefCommentText(VALUE mod, VALUE obj);                                              // clang_Cursor_getBriefCommentText
 static VALUE rb_clang_Cursor_getCommentRange(VALUE mod, VALUE obj);                                                  // clang_Cursor_getCommentRange
 static VALUE rb_clang_Cursor_getCXXManglings(VALUE mod, VALUE obj);                                                  // clang_Cursor_getCXXManglings
@@ -57,18 +57,18 @@ static VALUE rb_clang_Cursor_getNumArguments(VALUE mod, VALUE obj);             
 static VALUE rb_clang_Cursor_getNumTemplateArguments(VALUE mod, VALUE obj);                                          // clang_Cursor_getNumTemplateArguments
 static VALUE rb_clang_Cursor_getObjCDeclQualifiers(VALUE mod, VALUE obj);                                            // clang_Cursor_getObjCDeclQualifiers
 static VALUE rb_clang_Cursor_getObjCManglings(VALUE mod, VALUE obj);                                                 // clang_Cursor_getObjCManglings
-static VALUE rb_clang_Cursor_getObjCPropertyAttributes(VALUE mod, VALUE obj, VALUE index);                                        // clang_Cursor_getObjCPropertyAttributes
+static VALUE rb_clang_Cursor_getObjCPropertyAttributes(VALUE mod, VALUE obj, VALUE index);                           // clang_Cursor_getObjCPropertyAttributes
 static VALUE rb_clang_Cursor_getObjCSelectorIndex(VALUE mod, VALUE obj);                                             // clang_Cursor_getObjCSelectorIndex
 static VALUE rb_clang_Cursor_getOffsetOfField(VALUE mod, VALUE obj);                                                 // clang_Cursor_getOffsetOfField
 static VALUE rb_clang_Cursor_getParsedComment(VALUE mod, VALUE obj);                                                 // clang_Cursor_getParsedComment
 static VALUE rb_clang_Cursor_getRawCommentText(VALUE mod, VALUE obj);                                                // clang_Cursor_getRawCommentText
 static VALUE rb_clang_Cursor_getReceiverType(VALUE mod, VALUE obj);                                                  // clang_Cursor_getReceiverType
-static VALUE rb_clang_Cursor_getSpellingNameRange(VALUE mod, VALUE obj, VALUE index, VALUE options);                                             // clang_Cursor_getSpellingNameRange
+static VALUE rb_clang_Cursor_getSpellingNameRange(VALUE mod, VALUE obj, VALUE index, VALUE options);                 // clang_Cursor_getSpellingNameRange
 static VALUE rb_clang_Cursor_getStorageClass(VALUE mod, VALUE obj);                                                  // clang_Cursor_getStorageClass
-static VALUE rb_clang_Cursor_getTemplateArgumentKind(VALUE mod, VALUE obj, VALUE index);                                          // clang_Cursor_getTemplateArgumentKind
-static VALUE rb_clang_Cursor_getTemplateArgumentType(VALUE mod, VALUE obj, VALUE index);                                          // clang_Cursor_getTemplateArgumentType
-static VALUE rb_clang_Cursor_getTemplateArgumentUnsignedValue(VALUE mod, VALUE obj, VALUE index);                                 // clang_Cursor_getTemplateArgumentUnsignedValue
-static VALUE rb_clang_Cursor_getTemplateArgumentValue(VALUE mod, VALUE obj, VALUE index);                                         // clang_Cursor_getTemplateArgumentValue
+static VALUE rb_clang_Cursor_getTemplateArgumentKind(VALUE mod, VALUE obj, VALUE index);                             // clang_Cursor_getTemplateArgumentKind
+static VALUE rb_clang_Cursor_getTemplateArgumentType(VALUE mod, VALUE obj, VALUE index);                             // clang_Cursor_getTemplateArgumentType
+static VALUE rb_clang_Cursor_getTemplateArgumentUnsignedValue(VALUE mod, VALUE obj, VALUE index);                    // clang_Cursor_getTemplateArgumentUnsignedValue
+static VALUE rb_clang_Cursor_getTemplateArgumentValue(VALUE mod, VALUE obj, VALUE index);                            // clang_Cursor_getTemplateArgumentValue
 static VALUE rb_clang_Cursor_getTranslationUnit(VALUE mod, VALUE obj);                                               // clang_Cursor_getTranslationUnit
 static VALUE rb_clang_Cursor_hasAttrs(VALUE mod, VALUE obj);                                                         // clang_Cursor_hasAttrs
 static VALUE rb_clang_Cursor_isAnonymous(VALUE mod, VALUE obj);                                                      // clang_Cursor_isAnonymous
@@ -113,7 +113,7 @@ static VALUE rb_clang_disposeOverriddenCursors(VALUE mod, VALUE obj);           
 static VALUE rb_clang_disposeSourceRangeList(VALUE mod, VALUE obj);                                                  // clang_disposeSourceRangeList
 static VALUE rb_clang_disposeString(VALUE mod, VALUE obj);                                                           // clang_disposeString
 static VALUE rb_clang_disposeStringSet(VALUE mod, VALUE obj);                                                        // clang_disposeStringSet
-static VALUE rb_clang_disposeTokens(VALUE mod, VALUE obj);                                                           // clang_disposeTokens
+static VALUE rb_clang_disposeTokens(VALUE mod, VALUE trans_units, VALUE tokens, VALUE count);                        // clang_disposeTokens
 static VALUE rb_clang_disposeTranslationUnit(VALUE mod, VALUE obj);                                                  // clang_disposeTranslationUnit
 static VALUE rb_clang_enableStackTraces(VALUE mod, VALUE obj);                                                       // clang_enableStackTraces
 static VALUE rb_clang_EnumDecl_isScoped(VALUE mod, VALUE obj);                                                       // clang_EnumDecl_isScoped
@@ -139,7 +139,7 @@ static VALUE rb_clang_FullComment_getAsHTML(VALUE mod, VALUE obj);              
 static VALUE rb_clang_FullComment_getAsXML(VALUE mod, VALUE obj);                                                    // clang_FullComment_getAsXML
 static VALUE rb_clang_getAddressSpace(VALUE mod, VALUE obj);                                                         // clang_getAddressSpace
 static VALUE rb_clang_getAllSkippedRanges(VALUE mod, VALUE obj);                                                     // clang_getAllSkippedRanges
-static VALUE rb_clang_getArgType(VALUE mod, VALUE obj);                                                              // clang_getArgType
+static VALUE rb_clang_getArgType(VALUE mod, VALUE obj, VALUE index);                                                 // clang_getArgType
 static VALUE rb_clang_getArrayElementType(VALUE mod, VALUE obj);                                                     // clang_getArrayElementType
 static VALUE rb_clang_getArraySize(VALUE mod, VALUE obj);                                                            // clang_getArraySize
 static VALUE rb_clang_getBuildSessionTimestamp(VALUE mod, VALUE obj);                                                // clang_getBuildSessionTimestamp
@@ -172,7 +172,7 @@ static VALUE rb_clang_getCursorLinkage(VALUE mod, VALUE obj);                   
 static VALUE rb_clang_getCursorLocation(VALUE mod, VALUE obj);                                                       // clang_getCursorLocation
 static VALUE rb_clang_getCursorPlatformAvailability(VALUE mod, VALUE obj);                                           // clang_getCursorPlatformAvailability
 static VALUE rb_clang_getCursorReferenced(VALUE mod, VALUE obj);                                                     // clang_getCursorReferenced
-static VALUE rb_clang_getCursorReferenceNameRange(VALUE mod, VALUE obj);                                             // clang_getCursorReferenceNameRange
+static VALUE rb_clang_getCursorReferenceNameRange(VALUE mod, VALUE obj, VALUE flag, VALUE index);                    // clang_getCursorReferenceNameRange
 static VALUE rb_clang_getCursorResultType(VALUE mod, VALUE obj);                                                     // clang_getCursorResultType
 static VALUE rb_clang_getCursorSemanticParent(VALUE mod, VALUE obj);                                                 // clang_getCursorSemanticParent
 static VALUE rb_clang_getCursorSpelling(VALUE mod, VALUE obj);                                                       // clang_getCursorSpelling
@@ -184,7 +184,7 @@ static VALUE rb_clang_getCXTUResourceUsage(VALUE mod, VALUE obj);               
 static VALUE rb_clang_getCXXAccessSpecifier(VALUE mod, VALUE obj);                                                   // clang_getCXXAccessSpecifier
 static VALUE rb_clang_getDeclObjCTypeEncoding(VALUE mod, VALUE obj);                                                 // clang_getDeclObjCTypeEncoding
 static VALUE rb_clang_getDefinitionSpellingAndExtent(VALUE mod, VALUE obj);                                          // clang_getDefinitionSpellingAndExtent
-static VALUE rb_clang_getDiagnostic(VALUE mod, VALUE obj);                                                           // clang_getDiagnostic
+static VALUE rb_clang_getDiagnostic(VALUE mod, VALUE obj, VALUE index);                                              // clang_getDiagnostic
 static VALUE rb_clang_getDiagnosticCategory(VALUE mod, VALUE obj);                                                   // clang_getDiagnosticCategory
 static VALUE rb_clang_getDiagnosticCategoryName(VALUE mod, VALUE obj);                                               // clang_getDiagnosticCategoryName
 static VALUE rb_clang_getDiagnosticCategoryText(VALUE mod, VALUE obj);                                               // clang_getDiagnosticCategoryText
@@ -194,7 +194,7 @@ static VALUE rb_clang_getDiagnosticLocation(VALUE mod, VALUE obj);              
 static VALUE rb_clang_getDiagnosticNumFixIts(VALUE mod, VALUE obj);                                                  // clang_getDiagnosticNumFixIts
 static VALUE rb_clang_getDiagnosticNumRanges(VALUE mod, VALUE obj);                                                  // clang_getDiagnosticNumRanges
 static VALUE rb_clang_getDiagnosticOption(VALUE mod, VALUE obj);                                                     // clang_getDiagnosticOption
-static VALUE rb_clang_getDiagnosticRange(VALUE mod, VALUE obj);                                                      // clang_getDiagnosticRange
+static VALUE rb_clang_getDiagnosticRange(VALUE mod, VALUE obj, VALUE range);                                         // clang_getDiagnosticRange
 static VALUE rb_clang_getDiagnosticSetFromTU(VALUE mod, VALUE obj);                                                  // clang_getDiagnosticSetFromTU
 static VALUE rb_clang_getDiagnosticSeverity(VALUE mod, VALUE obj);                                                   // clang_getDiagnosticSeverity
 static VALUE rb_clang_getDiagnosticSpelling(VALUE mod, VALUE obj);                                                   // clang_getDiagnosticSpelling
@@ -205,12 +205,12 @@ static VALUE rb_clang_getEnumDeclIntegerType(VALUE mod, VALUE obj);             
 static VALUE rb_clang_getExceptionSpecificationType(VALUE mod, VALUE obj);                                           // clang_getExceptionSpecificationType
 static VALUE rb_clang_getExpansionLocation(VALUE mod, VALUE obj);                                                    // clang_getExpansionLocation
 static VALUE rb_clang_getFieldDeclBitWidth(VALUE mod, VALUE obj);                                                    // clang_getFieldDeclBitWidth
-static VALUE rb_clang_getFile(VALUE mod, VALUE obj);                                                                 // clang_getFile
-static VALUE rb_clang_getFileContents(VALUE mod, VALUE obj);                                                         // clang_getFileContents
+static VALUE rb_clang_getFile(VALUE mod, VALUE obj, VALUE filename);                                                 // clang_getFile
+static VALUE rb_clang_getFileContents(VALUE mod, VALUE obj, VALUE file, VALUE size);                                 // clang_getFileContents
 static VALUE rb_clang_getFileLocation(VALUE mod, VALUE obj);                                                         // clang_getFileLocation
 static VALUE rb_clang_getFileName(VALUE mod, VALUE obj);                                                             // clang_getFileName
 static VALUE rb_clang_getFileTime(VALUE mod, VALUE obj);                                                             // clang_getFileTime
-static VALUE rb_clang_getFileUniqueID(VALUE mod, VALUE obj);                                                         // clang_getFileUniqueID
+static VALUE rb_clang_getFileUniqueID(VALUE mod, VALUE obj, VALUE id);                                                         // clang_getFileUniqueID
 static VALUE rb_clang_getFunctionTypeCallingConv(VALUE mod, VALUE obj);                                              // clang_getFunctionTypeCallingConv
 static VALUE rb_clang_getIBOutletCollectionType(VALUE mod, VALUE obj);                                               // clang_getIBOutletCollectionType
 static VALUE rb_clang_getIncludedFile(VALUE mod, VALUE obj);                                                         // clang_getIncludedFile
@@ -309,7 +309,7 @@ static VALUE rb_clang_Location_isInSystemHeader(VALUE mod, VALUE obj);          
 static VALUE rb_clang_Module_getASTFile(VALUE mod, VALUE obj);                                                       // clang_Module_getASTFile
 static VALUE rb_clang_Module_getFullName(VALUE mod, VALUE obj);                                                      // clang_Module_getFullName
 static VALUE rb_clang_Module_getName(VALUE mod, VALUE obj);                                                          // clang_Module_getName
-static VALUE rb_clang_Module_getNumTopLevelHeaders(VALUE mod, VALUE obj);                                            // clang_Module_getNumTopLevelHeaders
+static VALUE rb_clang_Module_getNumTopLevelHeaders(VALUE mod, VALUE obj, VALUE module);                              // clang_Module_getNumTopLevelHeaders
 static VALUE rb_clang_Module_getParent(VALUE mod, VALUE obj);                                                        // clang_Module_getParent
 static VALUE rb_clang_Module_getTopLevelHeader(VALUE mod, VALUE obj);                                                // clang_Module_getTopLevelHeader
 static VALUE rb_clang_Module_isSystem(VALUE mod, VALUE obj);                                                         // clang_Module_isSystem
@@ -350,9 +350,9 @@ static VALUE rb_clang_Type_getCXXRefQualifier(VALUE mod, VALUE obj);            
 static VALUE rb_clang_Type_getNamedType(VALUE mod, VALUE obj);                                                       // clang_Type_getNamedType
 static VALUE rb_clang_Type_getNumTemplateArguments(VALUE mod, VALUE obj);                                            // clang_Type_getNumTemplateArguments
 static VALUE rb_clang_Type_getObjCEncoding(VALUE mod, VALUE obj);                                                    // clang_Type_getObjCEncoding
-static VALUE rb_clang_Type_getOffsetOf(VALUE mod, VALUE obj);                                                        // clang_Type_getOffsetOf
+static VALUE rb_clang_Type_getOffsetOf(VALUE mod, VALUE obj, VALUE t);                                               // clang_Type_getOffsetOf
 static VALUE rb_clang_Type_getSizeOf(VALUE mod, VALUE obj);                                                          // clang_Type_getSizeOf
-static VALUE rb_clang_Type_getTemplateArgumentAsType(VALUE mod, VALUE obj);                                          // clang_Type_getTemplateArgumentAsType
+static VALUE rb_clang_Type_getTemplateArgumentAsType(VALUE mod, VALUE obj, VALUE index);                             // clang_Type_getTemplateArgumentAsType
 static VALUE rb_clang_Type_isTransparentTagTypedef(VALUE mod, VALUE obj);                                            // clang_Type_isTransparentTagTypedef
 static VALUE rb_clang_Type_visitFields(VALUE mod, VALUE obj);                                                        // clang_Type_visitFields
 static VALUE rb_clang_VerbatimBlockLineComment_getText(VALUE mod, VALUE obj);                                        // clang_VerbatimBlockLineComment_getText
