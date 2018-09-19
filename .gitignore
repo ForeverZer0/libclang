@@ -11,3 +11,14 @@
 *.o
 *.a
 mkmf.log
+.vs/ProjectSettings.json
+.vscode/c_cpp_properties.json
+.vs/VSWorkspaceState.json
+.idea/libclang.iml
+.idea/libclang.iml
+.idea/vcs.xml
+.idea/workspace.xml
+.vs/libclang/v15/Browse.VC.db
+.vs/slnx.sqlite
+.vs/libclang/v15/.suo
+.vscode/tasks.json

@@ -1,6 +1,6 @@
-require "libclang/version"
-require "libclang/libclang"
+require_relative 'libclang/version'
+require_relative 'libclang/libclang'
 
-module Libclang
+module Clang
   # Your code goes here...
 end
