@@ -117,10 +117,10 @@ static VALUE rb_clang_disposeTokens(VALUE mod, VALUE trans_units, VALUE tokens, 
 static VALUE rb_clang_disposeTranslationUnit(VALUE mod, VALUE obj);                                                  // clang_disposeTranslationUnit
 static VALUE rb_clang_enableStackTraces(VALUE mod, VALUE obj);                                                       // clang_enableStackTraces
 static VALUE rb_clang_EnumDecl_isScoped(VALUE mod, VALUE obj);                                                       // clang_EnumDecl_isScoped
-static VALUE rb_clang_equalCursors(VALUE mod, VALUE obj);                                                            // clang_equalCursors
-static VALUE rb_clang_equalLocations(VALUE mod, VALUE obj);                                                          // clang_equalLocations
-static VALUE rb_clang_equalRanges(VALUE mod, VALUE obj);                                                             // clang_equalRanges
-static VALUE rb_clang_equalTypes(VALUE mod, VALUE obj);                                                              // clang_equalTypes
+static VALUE rb_clang_equalCursors(VALUE mod, VALUE left, VALUE right);                                                            // clang_equalCursors
+static VALUE rb_clang_equalLocations(VALUE mod, VALUE left, VALUE right);                                                          // clang_equalLocations
+static VALUE rb_clang_equalRanges(VALUE mod, VALUE left, VALUE right);                                                             // clang_equalRanges
+static VALUE rb_clang_equalTypes(VALUE mod, VALUE left, VALUE right);                                                              // clang_equalTypes
 static VALUE rb_clang_EvalResult_dispose(VALUE mod, VALUE obj);                                                      // clang_EvalResult_dispose
 static VALUE rb_clang_EvalResult_getAsDouble(VALUE mod, VALUE obj);                                                  // clang_EvalResult_getAsDouble
 static VALUE rb_clang_EvalResult_getAsInt(VALUE mod, VALUE obj);                                                     // clang_EvalResult_getAsInt
@@ -216,7 +216,7 @@ static VALUE rb_clang_getIBOutletCollectionType(VALUE mod, VALUE obj);          
 static VALUE rb_clang_getIncludedFile(VALUE mod, VALUE obj);                                                         // clang_getIncludedFile
 static VALUE rb_clang_getInclusions(VALUE mod, VALUE obj);                                                           // clang_getInclusions
 static VALUE rb_clang_getInstantiationLocation(VALUE mod, VALUE obj);                                                // clang_getInstantiationLocation
-static VALUE rb_clang_getLocation(VALUE mod, VALUE obj);                                                             // clang_getLocation
+static VALUE rb_clang_getLocation(VALUE mod, VALUE obj, VALUE file, VALUE line, VALUE column);                                                             // clang_getLocation
 static VALUE rb_clang_getLocationForOffset(VALUE mod, VALUE obj);                                                    // clang_getLocationForOffset
 static VALUE rb_clang_getModuleForFile(VALUE mod, VALUE obj);                                                        // clang_getModuleForFile
 static VALUE rb_clang_getNullCursor(VALUE mod, VALUE obj);                                                           // clang_getNullCursor
@@ -232,20 +232,20 @@ static VALUE rb_clang_getOverloadedDecl(VALUE mod, VALUE obj);                  
 static VALUE rb_clang_getOverriddenCursors(VALUE mod, VALUE obj);                                                    // clang_getOverriddenCursors
 static VALUE rb_clang_getPointeeType(VALUE mod, VALUE obj);                                                          // clang_getPointeeType
 static VALUE rb_clang_getPresumedLocation(VALUE mod, VALUE obj);                                                     // clang_getPresumedLocation
-static VALUE rb_clang_getRange(VALUE mod, VALUE obj);                                                                // clang_getRange
+static VALUE rb_clang_getRange(VALUE mod, VALUE start, VALUE finish);                                                                // clang_getRange
 static VALUE rb_clang_getRangeEnd(VALUE mod, VALUE obj);                                                             // clang_getRangeEnd
 static VALUE rb_clang_getRangeStart(VALUE mod, VALUE obj);                                                           // clang_getRangeStart
 static VALUE rb_clang_getRemappings(VALUE mod, VALUE obj);                                                           // clang_getRemappings
 static VALUE rb_clang_getRemappingsFromFileList(VALUE mod, VALUE obj);                                               // clang_getRemappingsFromFileList
 static VALUE rb_clang_getResultType(VALUE mod, VALUE obj);                                                           // clang_getResultType
-static VALUE rb_clang_getSkippedRanges(VALUE mod, VALUE obj);                                                        // clang_getSkippedRanges
+static VALUE rb_clang_getSkippedRanges(VALUE mod, VALUE obj, VALUE file));                                                        // clang_getSkippedRanges
 static VALUE rb_clang_getSpecializedCursorTemplate(VALUE mod, VALUE obj);                                            // clang_getSpecializedCursorTemplate
 static VALUE rb_clang_getSpellingLocation(VALUE mod, VALUE obj);                                                     // clang_getSpellingLocation
 static VALUE rb_clang_getTemplateCursorKind(VALUE mod, VALUE obj);                                                   // clang_getTemplateCursorKind
-static VALUE rb_clang_getTokenExtent(VALUE mod, VALUE obj);                                                          // clang_getTokenExtent
+static VALUE rb_clang_getTokenExtent(VALUE mod, VALUE obj, VALUE token);                                                          // clang_getTokenExtent
 static VALUE rb_clang_getTokenKind(VALUE mod, VALUE obj);                                                            // clang_getTokenKind
-static VALUE rb_clang_getTokenLocation(VALUE mod, VALUE obj);                                                        // clang_getTokenLocation
-static VALUE rb_clang_getTokenSpelling(VALUE mod, VALUE obj);                                                        // clang_getTokenSpelling
+static VALUE rb_clang_getTokenLocation(VALUE mod, VALUE obj, VALUE token);                                                        // clang_getTokenLocation
+static VALUE rb_clang_getTokenSpelling(VALUE mod, VALUE obj, VALUE token);                                                        // clang_getTokenSpelling
 static VALUE rb_clang_getTranslationUnitCursor(VALUE mod, VALUE obj);                                                // clang_getTranslationUnitCursor
 static VALUE rb_clang_getTranslationUnitSpelling(VALUE mod, VALUE obj);                                              // clang_getTranslationUnitSpelling
 static VALUE rb_clang_getTranslationUnitTargetInfo(VALUE mod, VALUE obj);                                            // clang_getTranslationUnitTargetInfo
@@ -323,9 +323,9 @@ static VALUE rb_clang_ParamCommandComment_getParamIndex(VALUE mod, VALUE obj);  
 static VALUE rb_clang_ParamCommandComment_getParamName(VALUE mod, VALUE obj);                                        // clang_ParamCommandComment_getParamName
 static VALUE rb_clang_ParamCommandComment_isDirectionExplicit(VALUE mod, VALUE obj);                                 // clang_ParamCommandComment_isDirectionExplicit
 static VALUE rb_clang_ParamCommandComment_isParamIndexValid(VALUE mod, VALUE obj);                                   // clang_ParamCommandComment_isParamIndexValid
-static VALUE rb_clang_parseTranslationUnit(VALUE mod, VALUE obj);                                                    // clang_parseTranslationUnit
-static VALUE rb_clang_parseTranslationUnit2(VALUE mod, VALUE obj);                                                   // clang_parseTranslationUnit2
-static VALUE rb_clang_parseTranslationUnit2FullArgv(VALUE mod, VALUE obj);                                           // clang_parseTranslationUnit2FullArgv
+static VALUE rb_clang_parseTranslationUnit(int argc, VALUE *argv, VALUE mod);                                                    // clang_parseTranslationUnit
+static VALUE rb_clang_parseTranslationUnit2(int argc, VALUE *argv, VALUE mod);                                                   // clang_parseTranslationUnit2
+static VALUE rb_clang_parseTranslationUnit2FullArgv(int argc, VALUE *argv, VALUE mod);                                           // clang_parseTranslationUnit2FullArgv
 static VALUE rb_clang_Range_isNull(VALUE mod, VALUE obj);                                                            // clang_Range_isNull
 static VALUE rb_clang_remap_dispose(VALUE mod, VALUE obj);                                                           // clang_remap_dispose
 static VALUE rb_clang_remap_getFilenames(VALUE mod, VALUE obj);                                                      // clang_remap_getFilenames

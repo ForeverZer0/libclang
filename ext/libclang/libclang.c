@@ -1,7 +1,5 @@
 #include "libclang.h"
 
-#define HIDE 1
-
 VALUE rb_mLibClang;
 
 #define METHOD(name, function, argc) rb_define_singleton_method(rb_mLibClang, name, function, argc)
@@ -168,10 +166,10 @@ void Init_libclang(void) {
     METHOD("DisposeTranslationUnit", rb_clang_disposeTranslationUnit, 1);
     METHOD("EnableStackTraces", rb_clang_enableStackTraces, 1);
     METHOD("EnumDeclIsScoped", rb_clang_EnumDecl_isScoped, 1);
-    METHOD("EqualCursors", rb_clang_equalCursors, 1);
-    METHOD("EqualLocations", rb_clang_equalLocations, 1);
-    METHOD("EqualRanges", rb_clang_equalRanges, 1);
-    METHOD("EqualTypes", rb_clang_equalTypes, 1);
+    METHOD("EqualCursors", rb_clang_equalCursors, 2);
+    METHOD("EqualLocations", rb_clang_equalLocations, 2);
+    METHOD("EqualRanges", rb_clang_equalRanges, 2);
+    METHOD("EqualTypes", rb_clang_equalTypes, 2);
     METHOD("EvalResultDispose", rb_clang_EvalResult_dispose, 1);
     METHOD("EvalResultGetAsDouble", rb_clang_EvalResult_getAsDouble, 1);
     METHOD("EvalResultGetAsInt", rb_clang_EvalResult_getAsInt, 1);
@@ -267,7 +265,7 @@ void Init_libclang(void) {
     METHOD("GetIncludedFile", rb_clang_getIncludedFile, 1);
     METHOD("GetInclusions", rb_clang_getInclusions, 1);
     METHOD("GetInstantiationLocation", rb_clang_getInstantiationLocation, 1);
-    METHOD("GetLocation", rb_clang_getLocation, 1);
+    METHOD("GetLocation", rb_clang_getLocation, 4);
     METHOD("GetLocationForOffset", rb_clang_getLocationForOffset, 1);
     METHOD("GetModuleForFile", rb_clang_getModuleForFile, 1);
     METHOD("GetNullCursor", rb_clang_getNullCursor, 1);
@@ -283,20 +281,20 @@ void Init_libclang(void) {
     METHOD("GetOverriddenCursors", rb_clang_getOverriddenCursors, 1);
     METHOD("GetPointeeType", rb_clang_getPointeeType, 1);
     METHOD("GetPresumedLocation", rb_clang_getPresumedLocation, 1);
-    METHOD("GetRange", rb_clang_getRange, 1);
+    METHOD("GetRange", rb_clang_getRange, 2);
     METHOD("GetRangeEnd", rb_clang_getRangeEnd, 1);
     METHOD("GetRangeStart", rb_clang_getRangeStart, 1);
     METHOD("GetRemappings", rb_clang_getRemappings, 1);
     METHOD("GetRemappingsFromFileList", rb_clang_getRemappingsFromFileList, 1);
     METHOD("GetResultType", rb_clang_getResultType, 1);
-    METHOD("GetSkippedRanges", rb_clang_getSkippedRanges, 1);
+    METHOD("GetSkippedRanges", rb_clang_getSkippedRanges, 2);
     METHOD("GetSpecializedCursorTemplate", rb_clang_getSpecializedCursorTemplate, 1);
     METHOD("GetSpellingLocation", rb_clang_getSpellingLocation, 1);
     METHOD("GetTemplateCursorKind", rb_clang_getTemplateCursorKind, 1);
-    METHOD("GetTokenExtent", rb_clang_getTokenExtent, 1);
+    METHOD("GetTokenExtent", rb_clang_getTokenExtent, 2);
     METHOD("GetTokenKind", rb_clang_getTokenKind, 1);
-    METHOD("GetTokenLocation", rb_clang_getTokenLocation, 1);
-    METHOD("GetTokenSpelling", rb_clang_getTokenSpelling, 1);
+    METHOD("GetTokenLocation", rb_clang_getTokenLocation, 2);
+    METHOD("GetTokenSpelling", rb_clang_getTokenSpelling, 2);
     METHOD("GetTranslationUnitCursor", rb_clang_getTranslationUnitCursor, 1);
     METHOD("GetTranslationUnitSpelling", rb_clang_getTranslationUnitSpelling, 1);
     METHOD("GetTranslationUnitTargetInfo", rb_clang_getTranslationUnitTargetInfo, 1);
@@ -374,9 +372,9 @@ void Init_libclang(void) {
     METHOD("ParamCommandCommentGetParamName", rb_clang_ParamCommandComment_getParamName, 1);
     METHOD("ParamCommandCommentIsDirectionExplicit", rb_clang_ParamCommandComment_isDirectionExplicit, 1);
     METHOD("ParamCommandCommentIsParamIndexValid", rb_clang_ParamCommandComment_isParamIndexValid, 1);
-    METHOD("ParseTranslationUnit", rb_clang_parseTranslationUnit, 1);
-    METHOD("ParseTranslationUnit2", rb_clang_parseTranslationUnit2, 1);
-    METHOD("ParseTranslationUnit2FullArgv", rb_clang_parseTranslationUnit2FullArgv, 1);
+    METHOD("ParseTranslationUnit", rb_clang_parseTranslationUnit, -1);
+    METHOD("ParseTranslationUnit2", rb_clang_parseTranslationUnit2, -1);
+    METHOD("ParseTranslationUnit2FullArgv", rb_clang_parseTranslationUnit2FullArgv, -1);
     METHOD("RangeIsNull", rb_clang_Range_isNull, 1);
     METHOD("RemapDispose", rb_clang_remap_dispose, 1);
     METHOD("RemapGetFilenames", rb_clang_remap_getFilenames, 1);
@@ -427,116 +425,10 @@ static VALUE rb_clang_disposeIndex(VALUE mod, VALUE obj) {
     return Qnil;
 }
 
-WRAP_BOOL_FUNC(rb_clang_Module_isSystem, clang_Module_isSystem, CXModule)
-WRAP_BOOL_FUNC(rb_clang_ParamCommandComment_isDirectionExplicit, clang_ParamCommandComment_isDirectionExplicit, CXComment)
-WRAP_BOOL_FUNC(rb_clang_ParamCommandComment_isParamIndexValid, clang_ParamCommandComment_isParamIndexValid, CXComment)
-WRAP_BOOL_FUNC(rb_clang_Range_isNull, clang_Range_isNull, CXSourceRange)
-WRAP_BOOL_FUNC(rb_clang_TParamCommandComment_isParamPositionValid, clang_TParamCommandComment_isParamPositionValid, CXComment)
-WRAP_BOOL_FUNC(rb_clang_Type_isTransparentTagTypedef, clang_Type_isTransparentTagTypedef, CXType)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isAnonymous, clang_Cursor_isAnonymous, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isBitField, clang_Cursor_isBitField, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isDynamicCall, clang_Cursor_isDynamicCall, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Location_isInSystemHeader, clang_Location_isInSystemHeader, CXSourceLocation)
-WRAP_BOOL_FUNC(rb_clang_Comment_isWhitespace, clang_Comment_isWhitespace, CXComment)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isFunctionInlined, clang_Cursor_isFunctionInlined, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isMacroBuiltin, clang_Cursor_isMacroBuiltin, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isMacroFunctionLike, clang_Cursor_isMacroFunctionLike, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isNull, clang_Cursor_isNull, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isObjCOptional, clang_Cursor_isObjCOptional, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Cursor_isVariadic, clang_Cursor_isVariadic, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isConvertingConstructor, clang_CXXConstructor_isConvertingConstructor, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isCopyConstructor, clang_CXXConstructor_isCopyConstructor, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isDefaultConstructor, clang_CXXConstructor_isDefaultConstructor, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isMoveConstructor, clang_CXXConstructor_isMoveConstructor, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXField_isMutable, clang_CXXField_isMutable, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXMethod_isConst, clang_CXXMethod_isConst, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXMethod_isDefaulted, clang_CXXMethod_isDefaulted, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXMethod_isPureVirtual, clang_CXXMethod_isPureVirtual, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXMethod_isStatic, clang_CXXMethod_isStatic, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_CXXMethod_isVirtual, clang_CXXMethod_isVirtual, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_isConstQualifiedType, clang_isConstQualifiedType, CXType)
-WRAP_BOOL_FUNC(rb_clang_isCursorDefinition, clang_isCursorDefinition, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_Location_isFromMainFile, clang_Location_isFromMainFile, CXSourceLocation)
-WRAP_BOOL_FUNC(rb_clang_EvalResult_isUnsignedInt, clang_EvalResult_isUnsignedInt, CXEvalResult)
-WRAP_BOOL_FUNC(rb_clang_CXXRecord_isAbstract, clang_CXXRecord_isAbstract, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_EnumDecl_isScoped, clang_EnumDecl_isScoped, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_isFunctionTypeVariadic, clang_isFunctionTypeVariadic, CXType)
-WRAP_BOOL_FUNC(rb_clang_isPODType, clang_isPODType, CXType)
-WRAP_BOOL_FUNC(rb_clang_isRestrictQualifiedType, clang_isRestrictQualifiedType, CXType)
-WRAP_BOOL_FUNC(rb_clang_isVirtualBase, clang_isVirtualBase, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_isVolatileQualifiedType, clang_isVolatileQualifiedType, CXType)
-WRAP_BOOL_FUNC(rb_clang_HTMLStartTagComment_isSelfClosing, clang_HTMLStartTagComment_isSelfClosing, CXComment)
-WRAP_BOOL_FUNC(rb_clang_Cursor_hasAttrs, clang_Cursor_hasAttrs, CXCursor)
-WRAP_BOOL_FUNC(rb_clang_InlineContentComment_hasTrailingNewline, clang_InlineContentComment_hasTrailingNewline, CXComment)
-
-WRAP_INT_FUNC(rb_clang_Cursor_getObjCSelectorIndex, clang_Cursor_getObjCSelectorIndex, CXCursor)
-WRAP_INT_FUNC(rb_clang_getNumArgTypes, clang_getNumArgTypes, CXType)
-WRAP_INT_FUNC(rb_clang_Type_getNumTemplateArguments, clang_Type_getNumTemplateArguments, CXType)
-WRAP_INT_FUNC(rb_clang_Cursor_getNumArguments, clang_Cursor_getNumArguments, CXCursor)
-WRAP_INT_FUNC(rb_clang_Cursor_getNumTemplateArguments, clang_Cursor_getNumTemplateArguments, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCursorAvailability, clang_getCursorAvailability, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCursorExceptionSpecificationType, clang_getCursorExceptionSpecificationType, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCursorKind, clang_getCursorKind, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCursorLanguage, clang_getCursorLanguage, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCursorLinkage, clang_getCursorLinkage, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCursorTLSKind, clang_getCursorTLSKind, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCursorVisibility, clang_getCursorVisibility, CXCursor)
-WRAP_INT_FUNC(rb_clang_Cursor_getStorageClass, clang_Cursor_getStorageClass, CXCursor)
-WRAP_INT_FUNC(rb_clang_Type_getCXXRefQualifier, clang_Type_getCXXRefQualifier, CXType)
-WRAP_INT_FUNC(rb_clang_getCXXAccessSpecifier, clang_getCXXAccessSpecifier, CXCursor)
-WRAP_INT_FUNC(rb_clang_getCompletionAvailability, clang_getCompletionAvailability, CXCompletionString)
-WRAP_INT_FUNC(rb_clang_getFieldDeclBitWidth, clang_getFieldDeclBitWidth, CXCursor)
-WRAP_INT_FUNC(rb_clang_getExceptionSpecificationType, clang_getExceptionSpecificationType, CXType)
-WRAP_INT_FUNC(rb_clang_getDiagnosticSeverity, clang_getDiagnosticSeverity, CXDiagnostic)
-
-WRAP_UINT_FUNC(rb_clang_getNumCompletionChunks, clang_getNumCompletionChunks, CXCompletionString)
-WRAP_UINT_FUNC(rb_clang_getNumDiagnostics, clang_getNumDiagnostics, CXTranslationUnit)
-WRAP_UINT_FUNC(rb_clang_getNumDiagnosticsInSet, clang_getNumDiagnosticsInSet, CXDiagnosticSet)
-WRAP_UINT_FUNC(rb_clang_getNumOverloadedDecls, clang_getNumOverloadedDecls, CXCursor)
-WRAP_UINT_FUNC(rb_clang_getDiagnosticNumFixIts, clang_getDiagnosticNumFixIts, CXDiagnostic)
-WRAP_UINT_FUNC(rb_clang_getDiagnosticNumRanges, clang_getDiagnosticNumRanges, CXDiagnostic)
-WRAP_UINT_FUNC(rb_clang_getCompletionNumAnnotations, clang_getCompletionNumAnnotations, CXCompletionString)
-WRAP_UINT_FUNC(rb_clang_remap_getNumFiles, clang_remap_getNumFiles, CXRemapping)
-WRAP_UINT_FUNC(rb_clang_InlineCommandComment_getNumArgs, clang_InlineCommandComment_getNumArgs, CXComment)
-WRAP_UINT_FUNC(rb_clang_HTMLStartTag_getNumAttrs, clang_HTMLStartTag_getNumAttrs, CXComment)
-WRAP_UINT_FUNC(rb_clang_BlockCommandComment_getNumArgs, clang_BlockCommandComment_getNumArgs, CXComment)
-WRAP_UINT_FUNC(rb_clang_Cursor_getObjCDeclQualifiers, clang_Cursor_getObjCDeclQualifiers, CXCursor)
-WRAP_UINT_FUNC(rb_clang_getAddressSpace, clang_getAddressSpace, CXType)
-WRAP_UINT_FUNC(rb_clang_getCompletionPriority, clang_getCompletionPriority, CXCompletionString)
-WRAP_UINT_FUNC(rb_clang_getDiagnosticCategory, clang_getDiagnosticCategory, CXDiagnostic)
-
-WRAP_STRING_FUNC(rb_clang_getDiagnosticSpelling, clang_getDiagnosticSpelling, CXDiagnostic)
-WRAP_STRING_FUNC(rb_clang_getCompletionBriefComment, clang_getCompletionBriefComment, CXCompletionString)
-WRAP_STRING_FUNC(rb_clang_getDeclObjCTypeEncoding, clang_getDeclObjCTypeEncoding, CXCursor)
-WRAP_STRING_FUNC(rb_clang_getDiagnosticCategoryText, clang_getDiagnosticCategoryText, CXDiagnostic)
-WRAP_STRING_FUNC(rb_clang_BlockCommandComment_getCommandName, clang_BlockCommandComment_getCommandName, CXComment)
-WRAP_STRING_FUNC(rb_clang_Type_getObjCEncoding, clang_Type_getObjCEncoding, CXType)
-WRAP_STRING_FUNC(rb_clang_getCursorSpelling, clang_getCursorSpelling, CXCursor)
-WRAP_STRING_FUNC(rb_clang_getCursorDisplayName, clang_getCursorDisplayName, CXCursor)
-WRAP_STRING_FUNC(rb_clang_getCursorUSR, clang_getCursorUSR, CXCursor)
-WRAP_STRING_FUNC(rb_clang_Cursor_getBriefCommentText, clang_Cursor_getBriefCommentText, CXCursor)
-WRAP_STRING_FUNC(rb_clang_Cursor_getMangling, clang_Cursor_getMangling, CXCursor)
-WRAP_STRING_FUNC(rb_clang_Cursor_getRawCommentText, clang_Cursor_getRawCommentText, CXCursor)
-
-WRAP_DISPOSE_FUNC(rb_clang_disposeCodeCompleteResults, clang_disposeCodeCompleteResults, CXCodeCompleteResults)
-WRAP_DISPOSE_FUNC(rb_clang_disposeCXCursorSet, clang_disposeCXCursorSet, CXCursorSet)
-WRAP_DISPOSE_FUNC(rb_clang_disposeCXPlatformAvailability, clang_disposeCXPlatformAvailability, CXPlatformAvailability)
-WRAP_DISPOSE_FUNC(rb_clang_disposeSourceRangeList, clang_disposeSourceRangeList, CXSourceRangeList)
-WRAP_DISPOSE_FUNC(rb_clang_disposeDiagnostic, clang_disposeDiagnostic, CXDiagnostic)
-WRAP_DISPOSE_FUNC(rb_clang_disposeDiagnosticSet, clang_disposeDiagnosticSet, CXDiagnosticSet)
-WRAP_DISPOSE_FUNC(rb_clang_disposeOverriddenCursors, clang_disposeOverriddenCursors, CXCursor)
-WRAP_DISPOSE_FUNC(rb_clang_disposeStringSet, clang_disposeStringSet, CXStringSet)
-WRAP_DISPOSE_FUNC(rb_clang_EvalResult_dispose, clang_EvalResult_dispose, CXEvalResult)
-WRAP_DISPOSE_FUNC(rb_clang_disposeTranslationUnit, clang_disposeTranslationUnit, CXTranslationUnit)
-WRAP_DISPOSE_FUNC(rb_clang_IndexAction_dispose, clang_IndexAction_dispose, CXIndexAction)
-WRAP_DISPOSE_FUNC(rb_clang_VirtualFileOverlay_dispose, clang_VirtualFileOverlay_dispose, CXVirtualFileOverlay)
-WRAP_DISPOSE_FUNC(rb_clang_TargetInfo_dispose, clang_TargetInfo_dispose, CXTargetInfo)
-WRAP_DISPOSE_FUNC(rb_clang_remap_dispose, clang_remap_dispose, CXRemapping)
-WRAP_DISPOSE_FUNC(rb_clang_ModuleMapDescriptor_dispose, clang_ModuleMapDescriptor_dispose, CXModuleMapDescriptor)
 // WRAP_DISPOSE_FUNC(rb_clang_CompilationDatabase_dispose, clang_CompilationDatabase_dispose)
 // WRAP_DISPOSE_FUNC(rb_clang_CompileCommands_dispose, clang_CompileCommands_dispose, Compi)
 
-#pragma region 
+#pragma region
 
 static VALUE rb_clang_isPreprocessing(VALUE mod, VALUE obj) {
     return clang_isPreprocessing(NUM2INT(obj)) ? Qtrue : Qfalse;
@@ -828,8 +720,6 @@ static VALUE rb_clang_Cursor_Evaluate(VALUE mod, VALUE obj) {
     return Data_Wrap_Struct(rb_cCXEvalResult, NULL, clang_EvalResult_dispose, &r);
 }
 
-#pragma endregion
-
 static VALUE rb_clang_getAllSkippedRanges(VALUE mod, VALUE obj) {
     UNWRAP(obj, CXTranslationUnit);
     CXSourceRangeList *l = clang_getAllSkippedRanges(*x);
@@ -979,9 +869,6 @@ static VALUE rb_clang_getIncludedFile(VALUE mod, VALUE obj) {
     RETURN_WRAP(&file, rb_cCXFile);
 }
 
-WRAP_INT_FUNC(rb_clang_getFunctionTypeCallingConv, clang_getFunctionTypeCallingConv, CXType)
-WRAP_STRING_FUNC(rb_clang_getFileName, clang_getFileName, CXFile)
-
 static VALUE rb_clang_getNullCursor(VALUE mod, VALUE obj) {
     CXCursor cursor = clang_getNullCursor();
     RETURN_CURSOR(&cursor);
@@ -1003,49 +890,243 @@ static VALUE rb_clang_getPointeeType(VALUE mod, VALUE obj) {
     RETURN_TYPE(&t);
 }
 
-static VALUE rb_clang_getPresumedLocation(VALUE mod, VALUE obj) {
-    // clang_getPresumedLocation
-    return Qnil;
-}
-
-static VALUE rb_clang_getRange(VALUE mod, VALUE obj) {
-    // clang_getRange
-    return Qnil;
+static VALUE rb_clang_getRange(VALUE mod, VALUE start, VALUE finish) {
+    CXSourceLocation *loc1, *loc2;
+    Data_Get_Struct(start, CXSourceLocation, loc1);
+    Data_Get_Struct(finish, CXSourceLocation, loc2);
+    CXSourceRange r = clang_getRange(*loc1, *loc2);
+    RETURN_WRAP(&r, rb_cCXSourceRange);
 }
 
 static VALUE rb_clang_getRangeEnd(VALUE mod, VALUE obj) {
-    // clang_getRangeEnd
-    return Qnil;
+    UNWRAP(obj, CXSourceRange);
+    CXSourceLocation loc = clang_getRangeEnd(*x);
+    RETURN_WRAP(&loc, rb_cCXSourceLocation);
 }
 
 static VALUE rb_clang_getRangeStart(VALUE mod, VALUE obj) {
-    // clang_getRangeStart
-    return Qnil;
+    UNWRAP(obj, CXSourceRange);
+    CXSourceLocation loc = clang_getRangeStart(*x);
+    RETURN_WRAP(&loc, rb_cCXSourceLocation);
 }
 
 static VALUE rb_clang_getRemappings(VALUE mod, VALUE obj) {
-    // clang_getRemappings
-    return Qnil;
-}
-
-static VALUE rb_clang_getRemappingsFromFileList(VALUE mod, VALUE obj) {
-    // clang_getRemappingsFromFileList
-    return Qnil;
+    CXRemapping map = clang_getRemappings(StringValueCStr(obj));
+    RETURN_WRAP(&map, rb_cCXRemapping);
 }
 
 static VALUE rb_clang_getResultType(VALUE mod, VALUE obj) {
-    // clang_getResultType
-    return Qnil;
+    TYPE();
+    CXType t = clang_getResultType(*x);
+    RETURN_TYPE(&t);
 }
 
-static VALUE rb_clang_getSkippedRanges(VALUE mod, VALUE obj) {
-    // clang_getSkippedRanges
-    return Qnil;
+static VALUE rb_clang_getSkippedRanges(VALUE mod, VALUE obj, VALUE file) {
+    UNWRAP(obj, CXTranslationUnit);
+    CXFile *f;
+    Data_Get_Struct(file, CXFile, f);
+    CXSourceRangeList *list = clang_getSkippedRanges(*x, *f);
+    return Data_Wrap_Struct(rb_cCXSourceRangeList, NULL, clang_disposeSourceRangeList, list);
 }
 
 static VALUE rb_clang_getSpecializedCursorTemplate(VALUE mod, VALUE obj) {
-    // clang_getSpecializedCursorTemplate
-    return Qnil;
+    CURSOR();
+    CXCursor cursor = clang_getSpecializedCursorTemplate(*x);
+    RETURN_CURSOR(&cursor);
+}
+
+static VALUE rb_clang_getTokenExtent(VALUE mod, VALUE obj, VALUE token) {
+    UNWRAP(obj, CXTranslationUnit);
+    CXToken *t;
+    Data_Get_Struct(token, CXToken, t);
+    CXSourceRange r = clang_getTokenExtent(*x, *t);
+    RETURN_WRAP(&r, rb_cCXSourceRange);
+}
+
+static VALUE rb_clang_getTokenLocation(VALUE mod, VALUE obj, VALUE token) {
+    UNWRAP(obj, CXTranslationUnit);
+    CXToken *t;
+    Data_Get_Struct(token, CXToken, t);
+    CXSourceLocation loc = clang_getTokenLocation(*x, *t);
+    RETURN_WRAP(&loc, rb_cCXSourceLocation);
+}
+
+static VALUE rb_clang_getTokenSpelling(VALUE mod, VALUE obj, VALUE token) {
+    UNWRAP(obj, CXTranslationUnit);
+    CXToken *t;
+    Data_Get_Struct(token, CXToken, t);
+    CXString str = clang_getTokenSpelling(*x, *t);
+    RETURN_STRING(&str);
+}
+
+static VALUE rb_clang_getTUResourceUsageName(VALUE mod, VALUE obj) {
+    return rb_string_value_cstr(clang_getTUResourceUsageName(NUM2INT(obj)));
+}
+
+static VALUE rb_clang_getTypeDeclaration(VALUE mod, VALUE obj) {
+    TYPE();
+    CXCursor cursor = clang_getTypeDeclaration(*x);
+    RETURN_CURSOR(&cursor);
+}
+
+static VALUE rb_clang_getTypedefDeclUnderlyingType(VALUE mod, VALUE obj) {
+    CURSOR();
+    CXType t = clang_getTypedefDeclUnderlyingType(*x);
+    RETURN_TYPE(&t);
+}
+
+#pragma endregion
+
+static VALUE rb_clang_parseTranslationUnit(int argc, VALUE *argv, VALUE mod) {
+    VALUE index, filename, arguments, unsaved, options;
+    rb_scan_args(argc, argv, "23", &index, &filename, &arguments, &unsaved, &options);
+
+    CXIndex *cxindex;
+    Data_Get_Struct(index, CXIndex, cxindex);
+    const char *file = StringValueCStr(filename);
+
+    const char **args = NULL;
+    int argc = 0;
+
+    if (RTEST(arguments)) {
+        argc = rb_array_len(arguments);
+        args = xmalloc(sizeof(const char *) * argc);
+        for (long i = 0; i < argc; i++) {
+            VALUE arg = rb_ary_entry(arguments, i);
+            args[i] = StringValueCStr(arg);
+        }
+    }
+
+    struct CXUnsavedFile **ufiles = NULL;
+    int ufile_count = 0;
+    if (RTEST(unsaved)) {
+        ufile_count = rb_array_len(unsaved);
+        ufiles = xmalloc(sizeof(struct CXUnsavedFile) * ufile_count);
+        for (long i = 0; i < ufile_count; i++) {
+            VALUE u = rb_ary_entry(unsaved, i);
+            UNWRAP(u, struct CXUnsavedFile);
+            ufiles[i] = x;
+        }
+    }
+    unsigned int opt = RTEST(options) ? NUM2UINT(options) : 0;
+
+    CXTranslationUnit unit = clang_parseTranslationUnit(*cxindex, file, args, argc, ufiles, ufile_count, opt);
+
+    xfree(args);
+    xfree(ufiles);
+    RETURN_WRAP(&unit, rb_cCXTranslationUnit);
+}
+
+static VALUE rb_clang_parseTranslationUnit2(int argc, VALUE *argv, VALUE mod) {
+    VALUE index, filename, unit, arguments, unsaved, options;
+    rb_scan_args(argc, argv, "33", &index, &filename, &unit, &arguments, &unsaved, &options);
+
+    CXIndex *cxindex;
+    Data_Get_Struct(index, CXIndex, cxindex);
+    const char *file = StringValueCStr(filename);
+
+    const char **args = NULL;
+    int argc = 0;
+    if (RTEST(arguments)) {
+        argc = rb_array_len(arguments);
+        args = xmalloc(sizeof(const char *) * argc);
+        for (long i = 0; i < argc; i++) {
+            VALUE arg = rb_ary_entry(arguments, i);
+            args[i] = StringValueCStr(arg);
+        }
+    }
+
+    struct CXUnsavedFile **ufiles = NULL;
+    int ufile_count = 0;
+    if (RTEST(unsaved)) {
+        ufile_count = rb_array_len(unsaved);
+        ufiles = xmalloc(sizeof(struct CXUnsavedFile) * ufile_count);
+        for (long i = 0; i < ufile_count; i++) {
+            VALUE u = rb_ary_entry(unsaved, i);
+            UNWRAP(u, struct CXUnsavedFile);
+            ufiles[i] = x;
+        }
+    }
+    unsigned int opt = RTEST(options) ? NUM2UINT(options) : 0;
+
+    CXTranslationUnit *tu;
+    Data_Get_Struct(unit, CXTranslationUnit, tu);
+    int code = clang_parseTranslationUnit2(*cxindex, file, args, argc, ufiles, ufile_count, opt, &tu);
+
+    xfree(args);
+    xfree(ufiles);
+    return INT2NUM(code);
+}
+
+static VALUE rb_clang_EvalResult_getAsDouble(VALUE mod, VALUE obj) {
+    UNWRAP(obj, CXEvalResult);
+    return DBL2NUM(clang_EvalResult_getAsDouble(*x));
+}
+
+WRAP_INT_FUNC(rb_clang_EvalResult_getAsInt, clang_EvalResult_getAsInt, CXEvalResult)
+WRAP_INT_FUNC(rb_clang_EvalResult_getKind, clang_EvalResult_getKind, CXEvalResult)
+
+static VALUE rb_clang_EvalResult_getAsLongLong(VALUE mod, VALUE obj) {
+    UNWRAP(obj, CXEvalResult);
+    return LL2NUM(clang_EvalResult_getAsLongLong(*x));
+}
+
+static VALUE rb_clang_EvalResult_getAsStr(VALUE mod, VALUE obj) {
+    UNWRAP(obj, CXEvalResult);
+    return rb_str_new_cstr(clang_EvalResult_getAsStr(*x));
+}
+
+static VALUE rb_clang_EvalResult_getAsUnsigned(VALUE mod, VALUE obj) {
+    UNWRAP(obj, CXEvalResult);
+    return ULL2NUM(clang_EvalResult_getAsUnsigned(*x));
+}
+
+static VALUE rb_clang_getLocation(VALUE mod, VALUE obj, VALUE file, VALUE line, VALUE column) {
+    UNWRAP(obj, CXTranslationUnit);
+    CXFile *f;
+    Data_Get_Struct(file, CXFile, f);
+    CXSourceLocation loc = clang_getLocation(*x, *f, NUm2UINT(line), NUm2UINT(column));
+    RETURN_WRAP(&loc, rb_cCXSourceLocation);
+}
+
+static VALUE rb_clang_equalCursors(VALUE mod, VALUE left, VALUE right) {
+    CXCursor *x1, *x2;
+    Data_Get_Struct(left, CXCursor, x1);
+    Data_Get_Struct(right, CXCursor, x2);
+    return clang_equalCursors(*x1, *x2) ? Qtrue : Qfalse;
+}
+
+static VALUE rb_clang_equalLocations(VALUE mod, VALUE left, VALUE right) {
+    CXSourceLocation *x1, *x2;
+    Data_Get_Struct(left, CXSourceLocation, x1);
+    Data_Get_Struct(right, CXSourceLocation, x2);
+    return clang_equalLocations(*x1, *x2) ? Qtrue : Qfalse;
+}
+
+static VALUE rb_clang_equalRanges(VALUE mod, VALUE left, VALUE right) {
+    CXSourceRange *x1, *x2;
+    Data_Get_Struct(left, CXSourceRange, x1);
+    Data_Get_Struct(right, CXSourceRange, x2);
+    return clang_equalRanges(*x1, *x2) ? Qtrue : Qfalse;
+}
+
+static VALUE rb_clang_equalTypes(VALUE mod, VALUE left, VALUE right) {
+    CXType *x1, *x2;
+    Data_Get_Struct(left, CXType, x1);
+    Data_Get_Struct(right, CXType, x2);
+    return clang_equalTypes(*x1, *x2) ? Qtrue : Qfalse;
+}
+
+static VALUE rb_clang_getTranslationUnitCursor(VALUE mod, VALUE obj) {
+    UNWRAP(obj, CXTranslationUnit);
+    CXCursor cursor = clang_getTranslationUnitCursor(*x);
+    RETURN_CURSOR(&cursor);
+}
+
+static VALUE rb_clang_getTranslationUnitTargetInfo(VALUE mod, VALUE obj) {
+    UNWRAP(obj, CXTranslationUnit);
+    CXTargetInfo info = clang_getTranslationUnitTargetInfo(*x);
+    return Data_Wrap_Struct(rb_cCXTargetInfo, NULL, clang_TargetInfo_dispose, &info);
 }
 
 static VALUE rb_clang_getSpellingLocation(VALUE mod, VALUE obj) {
@@ -1053,73 +1134,8 @@ static VALUE rb_clang_getSpellingLocation(VALUE mod, VALUE obj) {
     return Qnil;
 }
 
-static VALUE rb_clang_getTemplateCursorKind(VALUE mod, VALUE obj) {
-    // clang_getTemplateCursorKind
-    return Qnil;
-}
-
-static VALUE rb_clang_getTokenExtent(VALUE mod, VALUE obj) {
-    // clang_getTokenExtent
-    return Qnil;
-}
-
-static VALUE rb_clang_getTokenKind(VALUE mod, VALUE obj) {
-    // clang_getTokenKind
-    return Qnil;
-}
-
-static VALUE rb_clang_getTokenLocation(VALUE mod, VALUE obj) {
-    // clang_getTokenLocation
-    return Qnil;
-}
-
-static VALUE rb_clang_getTokenSpelling(VALUE mod, VALUE obj) {
-    // clang_getTokenSpelling
-    return Qnil;
-}
-
-static VALUE rb_clang_getTranslationUnitCursor(VALUE mod, VALUE obj) {
-    // clang_getTranslationUnitCursor
-    return Qnil;
-}
-
-static VALUE rb_clang_getTranslationUnitSpelling(VALUE mod, VALUE obj) {
-    // clang_getTranslationUnitSpelling
-    return Qnil;
-}
-
-static VALUE rb_clang_getTranslationUnitTargetInfo(VALUE mod, VALUE obj) {
-    // clang_getTranslationUnitTargetInfo
-    return Qnil;
-}
-
-static VALUE rb_clang_getTUResourceUsageName(VALUE mod, VALUE obj) {
-    // clang_getTUResourceUsageName
-    return Qnil;
-}
-
-static VALUE rb_clang_getTypeDeclaration(VALUE mod, VALUE obj) {
-    // clang_getTypeDeclaration
-    return Qnil;
-}
-
-static VALUE rb_clang_getTypedefDeclUnderlyingType(VALUE mod, VALUE obj) {
-    // clang_getTypedefDeclUnderlyingType
-    return Qnil;
-}
-
-static VALUE rb_clang_getTypedefName(VALUE mod, VALUE obj) {
-    // clang_getTypedefName
-    return Qnil;
-}
-
-static VALUE rb_clang_getTypeKindSpelling(VALUE mod, VALUE obj) {
-    // clang_getTypeKindSpelling
-    return Qnil;
-}
-
-static VALUE rb_clang_getTypeSpelling(VALUE mod, VALUE obj) {
-    // clang_getTypeSpelling
+static VALUE rb_clang_getRemappingsFromFileList(VALUE mod, VALUE obj) {
+    // clang_getRemappingsFromFileList
     return Qnil;
 }
 
@@ -1174,7 +1190,6 @@ static VALUE rb_clang_getExpansionLocation(VALUE mod, VALUE obj) {
 }
 
 static VALUE rb_clang_getFileLocation(VALUE mod, VALUE obj) {
-
     // clang_getFileLocation
     return Qnil;
 }
@@ -1186,11 +1201,6 @@ static VALUE rb_clang_getInclusions(VALUE mod, VALUE obj) {
 
 static VALUE rb_clang_getInstantiationLocation(VALUE mod, VALUE obj) {
     // clang_getInstantiationLocation
-    return Qnil;
-}
-
-static VALUE rb_clang_getLocation(VALUE mod, VALUE obj) {
-    // clang_getLocation
     return Qnil;
 }
 
@@ -1214,9 +1224,10 @@ static VALUE rb_clang_getOverriddenCursors(VALUE mod, VALUE obj) {
     return Qnil;
 }
 
-
-
-
+static VALUE rb_clang_getPresumedLocation(VALUE mod, VALUE obj) {
+    // clang_getPresumedLocation
+    return Qnil;
+}
 
 static VALUE rb_clang_codeCompleteGetContainerKind(VALUE mod, VALUE obj) {
     // clang_codeCompleteGetContainerKind
@@ -1428,56 +1439,6 @@ static VALUE rb_clang_enableStackTraces(VALUE mod, VALUE obj) {
     return Qnil;
 }
 
-static VALUE rb_clang_equalCursors(VALUE mod, VALUE obj) {
-    // clang_equalCursors
-    return Qnil;
-}
-
-static VALUE rb_clang_equalLocations(VALUE mod, VALUE obj) {
-    // clang_equalLocations
-    return Qnil;
-}
-
-static VALUE rb_clang_equalRanges(VALUE mod, VALUE obj) {
-    // clang_equalRanges
-    return Qnil;
-}
-
-static VALUE rb_clang_equalTypes(VALUE mod, VALUE obj) {
-    // clang_equalTypes
-    return Qnil;
-}
-
-static VALUE rb_clang_EvalResult_getAsDouble(VALUE mod, VALUE obj) {
-    // clang_EvalResult_getAsDouble
-    return Qnil;
-}
-
-static VALUE rb_clang_EvalResult_getAsInt(VALUE mod, VALUE obj) {
-    // clang_EvalResult_getAsInt
-    return Qnil;
-}
-
-static VALUE rb_clang_EvalResult_getAsLongLong(VALUE mod, VALUE obj) {
-    // clang_EvalResult_getAsLongLong
-    return Qnil;
-}
-
-static VALUE rb_clang_EvalResult_getAsStr(VALUE mod, VALUE obj) {
-    // clang_EvalResult_getAsStr
-    return Qnil;
-}
-
-static VALUE rb_clang_EvalResult_getAsUnsigned(VALUE mod, VALUE obj) {
-    // clang_EvalResult_getAsUnsigned
-    return Qnil;
-}
-
-static VALUE rb_clang_EvalResult_getKind(VALUE mod, VALUE obj) {
-    // clang_EvalResult_getKind
-    return Qnil;
-}
-
 static VALUE rb_clang_executeOnThread(VALUE mod, VALUE obj) {
     // clang_executeOnThread
     return Qnil;
@@ -1499,7 +1460,7 @@ static VALUE rb_clang_formatDiagnostic(VALUE mod, VALUE obj) {
 }
 
 static VALUE rb_clang_free(VALUE mod, VALUE obj) {
-    // clang_free
+    clang_free(RDATA(obj)->data);
     return Qnil;
 }
 
@@ -1510,11 +1471,6 @@ static VALUE rb_clang_FullComment_getAsHTML(VALUE mod, VALUE obj) {
 
 static VALUE rb_clang_FullComment_getAsXML(VALUE mod, VALUE obj) {
     // clang_FullComment_getAsXML
-    return Qnil;
-}
-
-static VALUE rb_clang_hashCursor(VALUE mod, VALUE obj) {
-    // clang_hashCursor
     return Qnil;
 }
 
@@ -1628,11 +1584,6 @@ static VALUE rb_clang_InlineCommandComment_getArgText(VALUE mod, VALUE obj) {
     return Qnil;
 }
 
-static VALUE rb_clang_InlineCommandComment_getCommandName(VALUE mod, VALUE obj) {
-    // clang_InlineCommandComment_getCommandName
-    return Qnil;
-}
-
 static VALUE rb_clang_InlineCommandComment_getRenderKind(VALUE mod, VALUE obj) {
     // clang_InlineCommandComment_getRenderKind
     return Qnil;
@@ -1645,16 +1596,6 @@ static VALUE rb_clang_loadDiagnostics(VALUE mod, VALUE obj) {
 
 static VALUE rb_clang_Module_getASTFile(VALUE mod, VALUE obj) {
     // clang_Module_getASTFile
-    return Qnil;
-}
-
-static VALUE rb_clang_Module_getFullName(VALUE mod, VALUE obj) {
-    // clang_Module_getFullName
-    return Qnil;
-}
-
-static VALUE rb_clang_Module_getName(VALUE mod, VALUE obj) {
-    // clang_Module_getName
     return Qnil;
 }
 
@@ -1698,22 +1639,7 @@ static VALUE rb_clang_ParamCommandComment_getParamIndex(VALUE mod, VALUE obj) {
     return Qnil;
 }
 
-static VALUE rb_clang_ParamCommandComment_getParamName(VALUE mod, VALUE obj) {
-    // clang_ParamCommandComment_getParamName
-    return Qnil;
-}
-
-static VALUE rb_clang_parseTranslationUnit(VALUE mod, VALUE obj) {
-    // clang_parseTranslationUnit
-    return Qnil;
-}
-
-static VALUE rb_clang_parseTranslationUnit2(VALUE mod, VALUE obj) {
-    // clang_parseTranslationUnit2
-    return Qnil;
-}
-
-static VALUE rb_clang_parseTranslationUnit2FullArgv(VALUE mod, VALUE obj) {
+static VALUE rb_clang_parseTranslationUnit2FullArgv(int argc, VALUE *argv, VALUE mod) {
     // clang_parseTranslationUnit2FullArgv
     return Qnil;
 }
@@ -1753,11 +1679,6 @@ static VALUE rb_clang_TargetInfo_getTriple(VALUE mod, VALUE obj) {
     return Qnil;
 }
 
-static VALUE rb_clang_TextComment_getText(VALUE mod, VALUE obj) {
-    // clang_TextComment_getText
-    return Qnil;
-}
-
 static VALUE rb_clang_toggleCrashRecovery(VALUE mod, VALUE obj) {
     // clang_toggleCrashRecovery
     return Qnil;
@@ -1775,21 +1696,6 @@ static VALUE rb_clang_TParamCommandComment_getDepth(VALUE mod, VALUE obj) {
 
 static VALUE rb_clang_TParamCommandComment_getIndex(VALUE mod, VALUE obj) {
     // clang_TParamCommandComment_getIndex
-    return Qnil;
-}
-
-static VALUE rb_clang_TParamCommandComment_getParamName(VALUE mod, VALUE obj) {
-    // clang_TParamCommandComment_getParamName
-    return Qnil;
-}
-
-static VALUE rb_clang_VerbatimBlockLineComment_getText(VALUE mod, VALUE obj) {
-    // clang_VerbatimBlockLineComment_getText
-    return Qnil;
-}
-
-static VALUE rb_clang_VerbatimLineComment_getText(VALUE mod, VALUE obj) {
-    // clang_VerbatimLineComment_getText
     return Qnil;
 }
 
@@ -1846,3 +1752,127 @@ static VALUE rb_clang_Type_visitFields(VALUE mod, VALUE obj) {
     // clang_Type_visitFields
     return Qnil;
 }
+
+WRAP_BOOL_FUNC(rb_clang_Module_isSystem, clang_Module_isSystem, CXModule)
+WRAP_BOOL_FUNC(rb_clang_ParamCommandComment_isDirectionExplicit, clang_ParamCommandComment_isDirectionExplicit, CXComment)
+WRAP_BOOL_FUNC(rb_clang_ParamCommandComment_isParamIndexValid, clang_ParamCommandComment_isParamIndexValid, CXComment)
+WRAP_BOOL_FUNC(rb_clang_Range_isNull, clang_Range_isNull, CXSourceRange)
+WRAP_BOOL_FUNC(rb_clang_TParamCommandComment_isParamPositionValid, clang_TParamCommandComment_isParamPositionValid, CXComment)
+WRAP_BOOL_FUNC(rb_clang_Type_isTransparentTagTypedef, clang_Type_isTransparentTagTypedef, CXType)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isAnonymous, clang_Cursor_isAnonymous, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isBitField, clang_Cursor_isBitField, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isDynamicCall, clang_Cursor_isDynamicCall, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Location_isInSystemHeader, clang_Location_isInSystemHeader, CXSourceLocation)
+WRAP_BOOL_FUNC(rb_clang_Comment_isWhitespace, clang_Comment_isWhitespace, CXComment)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isFunctionInlined, clang_Cursor_isFunctionInlined, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isMacroBuiltin, clang_Cursor_isMacroBuiltin, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isMacroFunctionLike, clang_Cursor_isMacroFunctionLike, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isNull, clang_Cursor_isNull, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isObjCOptional, clang_Cursor_isObjCOptional, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Cursor_isVariadic, clang_Cursor_isVariadic, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isConvertingConstructor, clang_CXXConstructor_isConvertingConstructor, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isCopyConstructor, clang_CXXConstructor_isCopyConstructor, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isDefaultConstructor, clang_CXXConstructor_isDefaultConstructor, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXConstructor_isMoveConstructor, clang_CXXConstructor_isMoveConstructor, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXField_isMutable, clang_CXXField_isMutable, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXMethod_isConst, clang_CXXMethod_isConst, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXMethod_isDefaulted, clang_CXXMethod_isDefaulted, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXMethod_isPureVirtual, clang_CXXMethod_isPureVirtual, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXMethod_isStatic, clang_CXXMethod_isStatic, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_CXXMethod_isVirtual, clang_CXXMethod_isVirtual, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_isConstQualifiedType, clang_isConstQualifiedType, CXType)
+WRAP_BOOL_FUNC(rb_clang_isCursorDefinition, clang_isCursorDefinition, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_Location_isFromMainFile, clang_Location_isFromMainFile, CXSourceLocation)
+WRAP_BOOL_FUNC(rb_clang_EvalResult_isUnsignedInt, clang_EvalResult_isUnsignedInt, CXEvalResult)
+WRAP_BOOL_FUNC(rb_clang_CXXRecord_isAbstract, clang_CXXRecord_isAbstract, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_EnumDecl_isScoped, clang_EnumDecl_isScoped, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_isFunctionTypeVariadic, clang_isFunctionTypeVariadic, CXType)
+WRAP_BOOL_FUNC(rb_clang_isPODType, clang_isPODType, CXType)
+WRAP_BOOL_FUNC(rb_clang_isRestrictQualifiedType, clang_isRestrictQualifiedType, CXType)
+WRAP_BOOL_FUNC(rb_clang_isVirtualBase, clang_isVirtualBase, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_isVolatileQualifiedType, clang_isVolatileQualifiedType, CXType)
+WRAP_BOOL_FUNC(rb_clang_HTMLStartTagComment_isSelfClosing, clang_HTMLStartTagComment_isSelfClosing, CXComment)
+WRAP_BOOL_FUNC(rb_clang_Cursor_hasAttrs, clang_Cursor_hasAttrs, CXCursor)
+WRAP_BOOL_FUNC(rb_clang_InlineContentComment_hasTrailingNewline, clang_InlineContentComment_hasTrailingNewline, CXComment)
+
+WRAP_INT_FUNC(rb_clang_Cursor_getObjCSelectorIndex, clang_Cursor_getObjCSelectorIndex, CXCursor)
+WRAP_INT_FUNC(rb_clang_getNumArgTypes, clang_getNumArgTypes, CXType)
+WRAP_INT_FUNC(rb_clang_Type_getNumTemplateArguments, clang_Type_getNumTemplateArguments, CXType)
+WRAP_INT_FUNC(rb_clang_Cursor_getNumArguments, clang_Cursor_getNumArguments, CXCursor)
+WRAP_INT_FUNC(rb_clang_Cursor_getNumTemplateArguments, clang_Cursor_getNumTemplateArguments, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCursorAvailability, clang_getCursorAvailability, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCursorExceptionSpecificationType, clang_getCursorExceptionSpecificationType, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCursorKind, clang_getCursorKind, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCursorLanguage, clang_getCursorLanguage, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCursorLinkage, clang_getCursorLinkage, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCursorTLSKind, clang_getCursorTLSKind, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCursorVisibility, clang_getCursorVisibility, CXCursor)
+WRAP_INT_FUNC(rb_clang_Cursor_getStorageClass, clang_Cursor_getStorageClass, CXCursor)
+WRAP_INT_FUNC(rb_clang_Type_getCXXRefQualifier, clang_Type_getCXXRefQualifier, CXType)
+WRAP_INT_FUNC(rb_clang_getCXXAccessSpecifier, clang_getCXXAccessSpecifier, CXCursor)
+WRAP_INT_FUNC(rb_clang_getCompletionAvailability, clang_getCompletionAvailability, CXCompletionString)
+WRAP_INT_FUNC(rb_clang_getFieldDeclBitWidth, clang_getFieldDeclBitWidth, CXCursor)
+WRAP_INT_FUNC(rb_clang_getExceptionSpecificationType, clang_getExceptionSpecificationType, CXType)
+WRAP_INT_FUNC(rb_clang_getDiagnosticSeverity, clang_getDiagnosticSeverity, CXDiagnostic)
+WRAP_INT_FUNC(rb_clang_getTemplateCursorKind, clang_getTemplateCursorKind, CXCursor)
+WRAP_INT_FUNC(rb_clang_getFunctionTypeCallingConv, clang_getFunctionTypeCallingConv, CXType)
+WRAP_INT_FUNC(rb_clang_getTokenKind, clang_getTokenKind, CXToken)
+
+WRAP_UINT_FUNC(rb_clang_getNumCompletionChunks, clang_getNumCompletionChunks, CXCompletionString)
+WRAP_UINT_FUNC(rb_clang_getNumDiagnostics, clang_getNumDiagnostics, CXTranslationUnit)
+WRAP_UINT_FUNC(rb_clang_getNumDiagnosticsInSet, clang_getNumDiagnosticsInSet, CXDiagnosticSet)
+WRAP_UINT_FUNC(rb_clang_getNumOverloadedDecls, clang_getNumOverloadedDecls, CXCursor)
+WRAP_UINT_FUNC(rb_clang_getDiagnosticNumFixIts, clang_getDiagnosticNumFixIts, CXDiagnostic)
+WRAP_UINT_FUNC(rb_clang_getDiagnosticNumRanges, clang_getDiagnosticNumRanges, CXDiagnostic)
+WRAP_UINT_FUNC(rb_clang_getCompletionNumAnnotations, clang_getCompletionNumAnnotations, CXCompletionString)
+WRAP_UINT_FUNC(rb_clang_remap_getNumFiles, clang_remap_getNumFiles, CXRemapping)
+WRAP_UINT_FUNC(rb_clang_InlineCommandComment_getNumArgs, clang_InlineCommandComment_getNumArgs, CXComment)
+WRAP_UINT_FUNC(rb_clang_HTMLStartTag_getNumAttrs, clang_HTMLStartTag_getNumAttrs, CXComment)
+WRAP_UINT_FUNC(rb_clang_BlockCommandComment_getNumArgs, clang_BlockCommandComment_getNumArgs, CXComment)
+WRAP_UINT_FUNC(rb_clang_Cursor_getObjCDeclQualifiers, clang_Cursor_getObjCDeclQualifiers, CXCursor)
+WRAP_UINT_FUNC(rb_clang_getAddressSpace, clang_getAddressSpace, CXType)
+WRAP_UINT_FUNC(rb_clang_getCompletionPriority, clang_getCompletionPriority, CXCompletionString)
+WRAP_UINT_FUNC(rb_clang_getDiagnosticCategory, clang_getDiagnosticCategory, CXDiagnostic)
+WRAP_UINT_FUNC(rb_clang_hashCursor, clang_hashCursor, CXCursor)
+
+WRAP_STRING_FUNC(rb_clang_getDiagnosticSpelling, clang_getDiagnosticSpelling, CXDiagnostic)
+WRAP_STRING_FUNC(rb_clang_getCompletionBriefComment, clang_getCompletionBriefComment, CXCompletionString)
+WRAP_STRING_FUNC(rb_clang_getDeclObjCTypeEncoding, clang_getDeclObjCTypeEncoding, CXCursor)
+WRAP_STRING_FUNC(rb_clang_getDiagnosticCategoryText, clang_getDiagnosticCategoryText, CXDiagnostic)
+WRAP_STRING_FUNC(rb_clang_BlockCommandComment_getCommandName, clang_BlockCommandComment_getCommandName, CXComment)
+WRAP_STRING_FUNC(rb_clang_Type_getObjCEncoding, clang_Type_getObjCEncoding, CXType)
+WRAP_STRING_FUNC(rb_clang_getCursorSpelling, clang_getCursorSpelling, CXCursor)
+WRAP_STRING_FUNC(rb_clang_getCursorDisplayName, clang_getCursorDisplayName, CXCursor)
+WRAP_STRING_FUNC(rb_clang_getCursorUSR, clang_getCursorUSR, CXCursor)
+WRAP_STRING_FUNC(rb_clang_Cursor_getBriefCommentText, clang_Cursor_getBriefCommentText, CXCursor)
+WRAP_STRING_FUNC(rb_clang_Cursor_getMangling, clang_Cursor_getMangling, CXCursor)
+WRAP_STRING_FUNC(rb_clang_Cursor_getRawCommentText, clang_Cursor_getRawCommentText, CXCursor)
+WRAP_STRING_FUNC(rb_clang_getFileName, clang_getFileName, CXFile)
+WRAP_STRING_FUNC(rb_clang_getTranslationUnitSpelling, clang_getTranslationUnitSpelling, CXTranslationUnit)
+WRAP_STRING_FUNC(rb_clang_getTypedefName, clang_getTypedefName, CXType)
+WRAP_STRING_FUNC(rb_clang_getTypeSpelling, clang_getTypeSpelling, CXType)
+WRAP_STRING_FUNC(rb_clang_getTypeSpelling, clang_getTypeSpelling, CXType)
+WRAP_STRING_FUNC(rb_clang_InlineCommandComment_getCommandName, clang_InlineCommandComment_getCommandName, CXComment)
+WRAP_STRING_FUNC(rb_clang_Module_getName, clang_Module_getName, CXModule)
+WRAP_STRING_FUNC(rb_clang_Module_getFullName, clang_Module_getFullName, CXModule)
+WRAP_STRING_FUNC(rb_clang_ParamCommandComment_getParamName, clang_ParamCommandComment_getParamName, CXComment)
+WRAP_STRING_FUNC(rb_clang_TextComment_getText, clang_TextComment_getText, CXComment)
+WRAP_STRING_FUNC(rb_clang_TParamCommandComment_getParamName, clang_TParamCommandComment_getParamName, CXComment)
+WRAP_STRING_FUNC(rb_clang_VerbatimBlockLineComment_getText, clang_VerbatimBlockLineComment_getText, CXComment)
+WRAP_STRING_FUNC(rb_clang_VerbatimLineComment_getText, clang_VerbatimLineComment_getText, CXComment)
+
+WRAP_DISPOSE_FUNC(rb_clang_disposeCodeCompleteResults, clang_disposeCodeCompleteResults, CXCodeCompleteResults)
+WRAP_DISPOSE_FUNC(rb_clang_disposeCXCursorSet, clang_disposeCXCursorSet, CXCursorSet)
+WRAP_DISPOSE_FUNC(rb_clang_disposeCXPlatformAvailability, clang_disposeCXPlatformAvailability, CXPlatformAvailability)
+WRAP_DISPOSE_FUNC(rb_clang_disposeSourceRangeList, clang_disposeSourceRangeList, CXSourceRangeList)
+WRAP_DISPOSE_FUNC(rb_clang_disposeDiagnostic, clang_disposeDiagnostic, CXDiagnostic)
+WRAP_DISPOSE_FUNC(rb_clang_disposeDiagnosticSet, clang_disposeDiagnosticSet, CXDiagnosticSet)
+WRAP_DISPOSE_FUNC(rb_clang_disposeOverriddenCursors, clang_disposeOverriddenCursors, CXCursor)
+WRAP_DISPOSE_FUNC(rb_clang_disposeStringSet, clang_disposeStringSet, CXStringSet)
+WRAP_DISPOSE_FUNC(rb_clang_EvalResult_dispose, clang_EvalResult_dispose, CXEvalResult)
+WRAP_DISPOSE_FUNC(rb_clang_disposeTranslationUnit, clang_disposeTranslationUnit, CXTranslationUnit)
+WRAP_DISPOSE_FUNC(rb_clang_IndexAction_dispose, clang_IndexAction_dispose, CXIndexAction)
+WRAP_DISPOSE_FUNC(rb_clang_VirtualFileOverlay_dispose, clang_VirtualFileOverlay_dispose, CXVirtualFileOverlay)
+WRAP_DISPOSE_FUNC(rb_clang_TargetInfo_dispose, clang_TargetInfo_dispose, CXTargetInfo)
+WRAP_DISPOSE_FUNC(rb_clang_remap_dispose, clang_remap_dispose, CXRemapping)
+WRAP_DISPOSE_FUNC(rb_clang_ModuleMapDescriptor_dispose, clang_ModuleMapDescriptor_dispose, CXModuleMapDescriptor)
